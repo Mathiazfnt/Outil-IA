@@ -1,0 +1,34 @@
+{{define "pokemon-info.html"}}
+<article class="pokemon-info">
+  <h3>{{.Nom}} — ID {{.ID}}</h3>
+
+  {{if .Image.FrontDefault}}
+  <a class="sprite-link" href="{{.Image.FrontDefault}}" target="_blank" rel="noopener">
+    <img class="pokemon-sprite" src="{{.Image.FrontDefault}}" alt="Sprite de {{.Nom}}">
+    Ouvrir le sprite dans un nouvel onglet
+  </a>
+  {{else}}
+  <p>Aucun sprite par défaut n’est disponible pour ce Pokémon.</p>
+  {{end}}
+
+  <dl class="pokemon-details">
+    <dt>Taille</dt><dd>{{.Taille}} dm</dd>
+    <dt>Poids</dt><dd>{{.Poids}} hg</dd>
+  </dl>
+
+  <h4>Types</h4>
+  <ul>
+    {{range .Types}}<li>{{.Type.Name}}</li>{{else}}<li>Aucun type disponible.</li>{{end}}
+  </ul>
+
+  <h4>Statistiques</h4>
+  <ul>
+    {{range .Stats}}<li>{{.Stat.Name}} : {{.BaseStat}}</li>{{else}}<li>Aucune statistique disponible.</li>{{end}}
+  </ul>
+
+  <h4>Faiblesses de type</h4>
+  <ul>
+    {{range .Faiblesses}}<li>{{.Nom}} : {{printf "%g" .Multiplicateur}} fois les dégâts normaux</li>{{else}}<li>Aucune faiblesse supérieure à ×1.</li>{{end}}
+  </ul>
+</article>
+{{end}}

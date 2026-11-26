@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Rechercher un Pokémon par nom ou identifiant et consulter ses détails et son sprite.">
+  <title>Pokédex — Recherche</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Pokédex</h1>
+    <p>Rechercher un Pokémon par son nom ou son identifiant</p>
+  </header>
+
+  <main>
+    <div class="features">
+      <section class="feature" aria-labelledby="recherche-titre">
+        <h2 id="recherche-titre">Rechercher un Pokémon</h2>
+        <p>Saisissez son nom ou son ID pour afficher sa fiche et son sprite.</p>
+        <form action="/pokemon" method="get">
+          <label class="search-label" for="pokemon-name">Nom ou ID
+            <input class="search-input" id="pokemon-name" name="name" type="search" list="pokemon-names" placeholder="Ex. Pikachu ou 25" value="{{.SearchTerm}}" required>
+          </label>
+          <datalist id="pokemon-names">
+            {{range .Suggestions}}<option value="{{.}}">{{end}}
+          </datalist>
+          <button class="button" type="submit">Rechercher</button>
+        </form>
+        {{if .SuggestionError}}<p class="error" role="status">{{.SuggestionError}}</p>{{end}}
+      </section>
+    </div>
+
+    <section class="feature combat-entry" aria-label="Simulation de combat">
+      <a class="button combat-button" href="/combat" target="_blank" rel="noopener">Simuler un combat</a>
+    </section>
+
+    {{if .Error}}
+    <p class="error" role="alert">{{.Error}}</p>
+    {{end}}
+
+    {{if .Pokemon}}
+    <section class="feature result" aria-labelledby="resultat-titre">
+      <h2 id="resultat-titre">Fiche du Pokémon</h2>
+      {{template "pokemon-info.html" .Pokemon}}
+    </section>
+    {{end}}
+  </main>
+
+  <footer>
+    Les données et sprites sont fournis par PokéAPI.
+  </footer>
+</body>
+</html>

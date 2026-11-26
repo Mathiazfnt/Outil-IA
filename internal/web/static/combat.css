@@ -1,0 +1,284 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+.combat-page {
+  min-height: 100vh;
+  color: white;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: linear-gradient(90deg, #c73e4a 0 50%, #2863ad 50% 100%);
+}
+
+.combat-header {
+  position: relative;
+  display: flex;
+  min-height: 6rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: linear-gradient(90deg, #b6323e 0 50%, #20569e 50% 100%);
+}
+
+.combat-header h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  text-align: center;
+}
+
+.back-link {
+  position: absolute;
+  left: 1.25rem;
+  color: white;
+  text-underline-offset: 0.2em;
+}
+
+.battle-sides {
+  position: relative;
+  min-height: calc(100vh - 6rem);
+}
+
+.battle-form {
+  display: grid;
+  min-height: calc(100vh - 6rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.battle-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 2rem clamp(1rem, 5vw, 5rem);
+  text-align: center;
+}
+
+.red-side {
+  background: rgba(199, 62, 74, 0.45);
+}
+
+.blue-side {
+  background: rgba(40, 99, 173, 0.45);
+}
+
+.battle-side h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.battle-side label {
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+.battle-side input {
+  width: min(100%, 22rem);
+  padding: 0.85rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 0.6rem;
+  color: #202b3c;
+  font: inherit;
+}
+
+.select-button {
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 0.45rem;
+  color: #202b3c;
+  background: white;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.pokemon-info {
+  width: min(100%, 32rem);
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  color: #202b3c;
+  background: rgba(255, 255, 255, 0.94);
+  text-align: left;
+}
+
+.pokemon-info h3,
+.pokemon-info h4 {
+  margin: 0.5rem 0;
+}
+
+.pokemon-info ul {
+  margin: 0.25rem 0 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.pokemon-info .pokemon-details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.2rem 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.pokemon-info .pokemon-details dd {
+  margin: 0;
+}
+
+.pokemon-info .sprite-link {
+  display: inline-block;
+  color: #244f94;
+}
+
+.pokemon-info .pokemon-sprite {
+  width: 96px;
+  height: 96px;
+}
+
+.battle-error {
+  position: absolute;
+  z-index: 4;
+  top: 0.5rem;
+  left: 50%;
+  max-width: min(90%, 32rem);
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  color: #842626;
+  background: white;
+  text-align: center;
+}
+
+.battle-result {
+  width: min(100% - 2rem, 960px);
+  margin: 2rem auto;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid #dce2ec;
+  border-radius: 0.75rem;
+  color: #202b3c;
+  background: white;
+}
+
+.battle-result h2 {
+  margin: 0 0 0.75rem;
+}
+
+.comparison-table {
+  overflow-x: auto;
+}
+
+.comparison-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 0.65rem;
+  border-bottom: 1px solid #dce2ec;
+}
+
+.comparison-table thead th {
+  color: white;
+  background: #243b67;
+}
+
+.red-stat-win {
+  background: #fff0f1;
+}
+
+.red-stat-win td:last-child {
+  color: #a52631;
+  font-weight: 700;
+}
+
+.blue-stat-win {
+  background: #eef5ff;
+}
+
+.blue-stat-win td:last-child {
+  color: #20569e;
+  font-weight: 700;
+}
+
+.stat-tie td:last-child {
+  color: #596579;
+}
+
+.battle-score,
+.battle-winner {
+  font-weight: 700;
+}
+
+.battle-winner {
+  font-size: 1.2rem;
+}
+
+.battle-side input:focus-visible,
+.back-link:focus-visible,
+.select-button:focus-visible,
+.versus-button:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 4px;
+}
+
+.versus-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(5.5rem, 12vw, 9rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 5px solid white;
+  border-radius: 50%;
+  color: white;
+  background: #222b3a;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+  font: inherit;
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .combat-header {
+    min-height: 5rem;
+    padding-left: 7rem;
+  }
+
+  .back-link {
+    left: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .battle-sides {
+    min-height: calc(100vh - 5rem);
+  }
+
+  .battle-form {
+    min-height: calc(100vh - 5rem);
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .combat-page {
+    background: linear-gradient(180deg, #c73e4a 0 50%, #2863ad 50% 100%);
+  }
+
+  .combat-header {
+    background: linear-gradient(90deg, #b6323e 0 50%, #20569e 50% 100%);
+  }
+
+  .battle-side {
+    padding: 1.5rem 1rem;
+  }
+
+  .versus-button {
+    top: 50%;
+  }
+}

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Choisissez deux Pokémon pour préparer un combat.">
+  <title>Pokédex — Simulation de combat</title>
+  <link rel="stylesheet" href="/combat.css">
+</head>
+<body class="combat-page">
+  <header class="combat-header">
+    <a class="back-link" href="/">Retour au Pokédex</a>
+    <h1>Simulation de combat</h1>
+  </header>
+
+  <main class="battle-sides">
+    {{if .Error}}<p class="battle-error" role="alert">{{.Error}}</p>{{end}}
+    <form id="battle-selection" class="battle-form" action="/combat" method="get">
+      <section class="battle-side red-side" aria-labelledby="red-title">
+        <h2 id="red-title">{{if .RedPokemon}}{{.RedPokemon.Nom}}{{else}}Équipe rouge{{end}}</h2>
+        <label for="red-pokemon">Choisir un Pokémon</label>
+        <input id="red-pokemon" name="red" type="search" list="pokemon-names" value="{{.RedSearchTerm}}" placeholder="Nom ou ID">
+        <button class="select-button" type="submit">Afficher les informations</button>
+        {{if .RedPokemon}}{{template "pokemon-info.html" .RedPokemon}}{{end}}
+      </section>
+
+      <section class="battle-side blue-side" aria-labelledby="blue-title">
+        <h2 id="blue-title">{{if .BluePokemon}}{{.BluePokemon.Nom}}{{else}}Équipe bleue{{end}}</h2>
+        <label for="blue-pokemon">Choisir un Pokémon</label>
+        <input id="blue-pokemon" name="blue" type="search" list="pokemon-names" value="{{.BlueSearchTerm}}" placeholder="Nom ou ID">
+        <button class="select-button" type="submit">Afficher les informations</button>
+        {{if .BluePokemon}}{{template "pokemon-info.html" .BluePokemon}}{{end}}
+      </section>
+    </form>
+
+    <button class="versus-button" form="battle-selection" type="submit" name="battle" value="1" aria-label="Comparer les Pokémon">VS</button>
+  </main>
+
+  {{if .Battle}}
+  <section class="battle-result" aria-labelledby="battle-result-title">
+    <h2 id="battle-result-title">{{.RedPokemon.Nom}} contre {{.BluePokemon.Nom}}</h2>
+    <p>Les statistiques comparées sont HP, attaque, défense, attaque spéciale, défense spéciale, vitesse, taille et poids. Une statistique gagnée vaut 1 point. Le meilleur multiplicateur de type donne 2 points par statistique gagnée ; si les multiplicateurs sont égaux et supérieurs à 1, les deux Pokémon ont cet avantage. Les égalités de statistiques ne donnent aucun point.</p>
+    <p>
+      {{.RedPokemon.Nom}} :
+      {{printf "%g" .Battle.MultiplicateurTypeRouge}} fois les dégâts normaux, {{.Battle.PointsParStatRouge}} point{{if ne .Battle.PointsParStatRouge 1}}s{{end}} par statistique gagnée.
+    </p>
+    <p>
+      {{.BluePokemon.Nom}} :
+      {{printf "%g" .Battle.MultiplicateurTypeBleu}} fois les dégâts normaux, {{.Battle.PointsParStatBleu}} point{{if ne .Battle.PointsParStatBleu 1}}s{{end}} par statistique gagnée.
+    </p>
+    <div class="comparison-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Statistique</th>
+            <th>{{.RedPokemon.Nom}}</th>
+            <th>{{.BluePokemon.Nom}}</th>
+            <th>Valeur supérieure</th>
+            <th>Points gagnés</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Battle.Statistiques}}
+          <tr class="{{if eq .Gagnant "red"}}red-stat-win{{else if eq .Gagnant "blue"}}blue-stat-win{{else}}stat-tie{{end}}">
+            <th scope="row">{{.Nom}}</th>
+            <td>{{if .Disponible}}{{.Rouge}}{{if .Unite}} {{.Unite}}{{end}}{{else}}—{{end}}</td>
+            <td>{{if .Disponible}}{{.Bleu}}{{if .Unite}} {{.Unite}}{{end}}{{else}}—{{end}}</td>
+            <td>
+              {{if not .Disponible}}Non comparée
+              {{else if eq .Gagnant "red"}}{{$.RedPokemon.Nom}}
+              {{else if eq .Gagnant "blue"}}{{$.BluePokemon.Nom}}
+              {{else}}Égalité
+              {{end}}
+            </td>
+            <td>
+              {{if .PointsRouge}}{{$.RedPokemon.Nom}} : {{.PointsRouge}} pt{{if ne .PointsRouge 1}}s{{end}}
+              {{else if .PointsBleu}}{{$.BluePokemon.Nom}} : {{.PointsBleu}} pt{{if ne .PointsBleu 1}}s{{end}}
+              {{else}}0 point{{end}}
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+    <p class="battle-score">Score : {{.RedPokemon.Nom}} {{.Battle.ScoreRouge}} — {{.BluePokemon.Nom}} {{.Battle.ScoreBleu}}</p>
+    <p class="battle-winner">
+      {{if eq .Battle.Gagnant "red"}}{{.RedPokemon.Nom}} gagne le combat !
+      {{else if eq .Battle.Gagnant "blue"}}{{.BluePokemon.Nom}} gagne le combat !
+      {{else if eq .Battle.Gagnant "draw"}}Égalité : {{.RedPokemon.Nom}} et {{.BluePokemon.Nom}} ont le même score.
+      {{else}}Impossible de déterminer le résultat : aucune statistique commune.
+      {{end}}
+    </p>
+  </section>
+  {{end}}
+
+  <datalist id="pokemon-names">
+    {{range .Suggestions}}<option value="{{.}}">{{end}}
+  </datalist>
+</body>
+</html>
